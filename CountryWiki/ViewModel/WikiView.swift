@@ -65,7 +65,6 @@ struct WikiView: View {
     }
 }
 
-// Компонент рядка (використовується і в WikiView, і в FavoritesView)
 struct CountryRowView: View {
     let country: Country
     
