@@ -14,12 +14,12 @@ struct WikiView: View {
         NavigationStack {
             ZStack {
                 if viewModel.isLoading {
-                    ProgressView("Завантаження...")
+                    ProgressView("Loading...")
                 } else if let error = viewModel.errorMessage {
                     VStack {
-                        Text("Помилка").font(.title)
+                        Text("Error").font(.title)
                         Text(error).foregroundColor(.red)
-                        Button("Спробувати ще") { viewModel.fetchCountries() }
+                        Button("Try again") { viewModel.fetchCountries() }
                             .buttonStyle(.bordered)
                     }
                 } else {
@@ -32,19 +32,19 @@ struct WikiView: View {
                 }
             }
             .navigationTitle("Wiki Countries")
-            .searchable(text: $viewModel.searchText, prompt: "Пошук країни...")
+            .searchable(text: $viewModel.searchText, prompt: "Search country...")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        Section("Сортування") {
+                        Section("Sort") {
                             Picker("Sort", selection: $viewModel.selectedSortOption) {
-                                Label("А-Я", systemImage: "textformat.abc").tag(SortOption.alphabeticalAscending)
-                                Label("Я-А", systemImage: "textformat.abc.dottedunderline").tag(SortOption.alphabeticalDescending)
-                                Label("Населення ↑", systemImage: "person.2").tag(SortOption.populationAscending)
-                                Label("Населення ↓", systemImage: "person.3.fill").tag(SortOption.populationDescending)
+                                Label("A-Z", systemImage: "textformat.abc").tag(SortOption.alphabeticalAscending)
+                                Label("Z-F", systemImage: "textformat.abc.dottedunderline").tag(SortOption.alphabeticalDescending)
+                                Label("Population ↑", systemImage: "person.2").tag(SortOption.populationAscending)
+                                Label("Population ↓", systemImage: "person.3.fill").tag(SortOption.populationDescending)
                             }
                         }
-                        Section("Регіон") {
+                        Section("Region") {
                             Picker("Region", selection: $viewModel.selectedRegion) {
                                 ForEach(RegionFilter.allCases, id: \.self) { region in
                                     Text(region.rawValue).tag(region)

@@ -57,11 +57,11 @@ struct CountryDetailView: View {
                     Divider()
                     
                     VStack(spacing: 15) {
-                        InfoRow(icon: "building.2", title: "Столиця", value: country.capital?.joined(separator: ", ") ?? "N/A")
-                        InfoRow(icon: "person.3", title: "Населення", value: "\(country.population)")
-                        InfoRow(icon: "map", title: "Регіон", value: country.region)
+                        InfoRow(icon: "building.2", title: "Capital", value: country.capital?.joined(separator: ", ") ?? "N/A")
+                        InfoRow(icon: "person.3", title: "Population", value: country.population.formatted(.number.notation(.compactName)))
+                        InfoRow(icon: "map", title: "Region", value: country.region)
                         if let currency = country.currencies?.values.first {
-                            InfoRow(icon: "banknote", title: "Валюта", value: "\(currency.name) (\(currency.symbol ?? ""))")
+                            InfoRow(icon: "banknote", title: "Currency", value: "\(currency.name) (\(currency.symbol ?? ""))")
                         }
                     }
                 }
@@ -100,21 +100,21 @@ struct CountryDetailView: View {
         .alert(alertTitle, isPresented: $showingAlert) {
             Button("OK", role: .cancel) { }
         } message: { Text(alertMessage) }
-        .alert("Доступ до фото заборонено", isPresented: $showSettingsAlert) {
-            Button("Налаштування") {
+        .alert("Photo Library Access Denied", isPresented: $showSettingsAlert) {
+            Button("Settings") {
                 if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
             }
-            Button("Скасувати", role: .cancel) { }
-        } message: { Text("Надайте дозвіл у налаштуваннях.") }
+            Button("Cancel", role: .cancel) { }
+        } message: { Text("Grant permission in the settings.") }
     }
     
     func findLocalVideo() {
         let fileName = country.name.common
         if let url = Bundle.main.url(forResource: fileName, withExtension: "mp4") {
-            print("Знайдено відео для \(fileName)")
+            print("Videos found for \(fileName)")
             self.localVideoUrl = url
         } else {
-            print("Відео для \(fileName) не знайдено в Bundle")
+            print("Video for \(fileName) Not found in Bundle")
             self.localVideoUrl = nil
         }
     }
@@ -141,14 +141,14 @@ struct CountryDetailView: View {
                 let imageSaver = ImageSaver()
                 imageSaver.onSuccess = {
                     DispatchQueue.main.async {
-                        alertTitle = "Успіх!"
-                        alertMessage = "Прапор збережено."
+                        alertTitle = "Success!"
+                        alertMessage = "Flag saved."
                         showingAlert = true
                     }
                 }
                 imageSaver.onError = { error in
                     DispatchQueue.main.async {
-                        alertTitle = "Помилка"
+                        alertTitle = "Error"
                         alertMessage = error.localizedDescription
                         showingAlert = true
                     }
